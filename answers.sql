@@ -1,21 +1,21 @@
 -- Question 1
-CREATE TABLE ProductDetails (
-    OrderID INT,
-    CustomerName VARCHAR(100),
-    Product VARCHAR(100),
-    PRIMARY KEY (OrderID, Product)
-);
+-- Using String_split
+SELECT
+    orderID,
+    CustomerName,
+    LTRIM(RTRIM(value)) as Product
+FROM
+    ProductDetail
+CROSS APPLY
+    STRING_SPLIT(Products, ',');
 
 -- Question 2
-CREATE TABLE Orders (
-    OrderID INT PRIMARY KEY,
-    CustomerName VARCHAR(100)
-);
+-- Table 1: Orders (OrderID, CustomerName)
+SELECT DISTINCT orderID, CustomerName
+INTO Orders
+FROM OrderDetails;
 
-CREATE TABLE OrderDetails (
-    OrderID INT,
-    Product VARCHAR(100),
-    Quantity INT,
-    PRIMARY KEY (OrderID, Product),
-    FOREIGN KEY (OrderID) REFERENCES Orders(OrderID)
-);
+-- Table 2: OrderItems (OrderID, Product, Quantity)
+SELECT OrderID, Product, Quantity
+INTO OrderItems
+FROM OrderDetails
